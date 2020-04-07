@@ -85,10 +85,10 @@ function showContact(contactId) {
   $(".first-name").html(contact.firstName);
   $(".last-name").html(contact.lastName);
   $(".phone-number").html(contact.phoneNumber);
-  $(".email-address").html(contact.address.personalEmailAddress + "," + contact.address.workEmailAddress);
+  //$(".email-address").html(newAddress.personalEmailAddress);
   $(".physical-address").html(contact.physicalAddress);
-  $(".mailing-address").html(contact.mailingAddress);
-  $(".new-emails").html(contact.addAddress);
+  //$(".mailing-address").html(contact.mailingAddress);
+  $(".mailing-address").html(contact.addAddress());
 
   var buttons = $("#buttons");
   buttons.empty();
@@ -118,9 +118,9 @@ $(document).ready(function() {
     var inputtedPhysicalAddress = $("input#new-physical-address").val();
     var inputtedPersonalEmailAddress = $("input#personal-email-address").val();
     var inputtedWorkEmailAddress = $("input#work-email-address").val();
-    var inputtedMailingAddress = $("input#new-mailing-address").val();
-    console.log(inputtedPersonalEmailAddress);
-    console.log(inputtedWorkEmailAddress);
+    // var inputtedMailingAddress = $("input#new-mailing-address").val();
+    // console.log(inputtedPersonalEmailAddress);
+    // console.log(inputtedWorkEmailAddress);
     
 
      // empty field after submission
@@ -135,10 +135,10 @@ $(document).ready(function() {
 
 
     var newAddress = new Address (inputtedPersonalEmailAddress, inputtedWorkEmailAddress);
-    var newContact = new Contact(inputtedFirstName, inputtedLastName, inputtedPhoneNumber, newAddress, inputtedPhysicalAddress, inputtedMailingAddress);
+    var newContact = new Contact(inputtedFirstName, inputtedLastName, inputtedPhoneNumber, newAddress, inputtedPhysicalAddress);
     addressBook.addContact(newContact);
     newContact.addAddress(newAddress);
-    console.log(addressBook.contacts);
+    console.log(newAddress.personalEmailAddress);
     
     displayContactDetails(addressBook);
   })
