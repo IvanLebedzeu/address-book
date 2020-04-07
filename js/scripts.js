@@ -4,11 +4,19 @@ function AddressBook() {
   this.currentId = 0;
 }
 
+
 //Method for adding contacts to contacts[]
 AddressBook.prototype.addContact = function(contact) {
   contact.id = this.assignId();
   this.contacts.push(contact);
 }
+
+Contact.prototype.addAddress = function(address) {
+  address = []
+  address.push(this.address);
+  return address.join();
+}
+
 
 AddressBook.prototype.assignId = function() {
   this.currentId += 1;
@@ -18,11 +26,11 @@ AddressBook.prototype.assignId = function() {
 //find contact by id method
 AddressBook.prototype.findContact = function(id) {
   for (var i=0; i< this.contacts.length; i++) {
-    if (this.contacts[i]) {     // <-- This line is new!
+    if (this.contacts[i]) {     
       if (this.contacts[i].id == id) {
         return this.contacts[i];
       }
-    }                          // <-- This line is also new!
+    }                          
   };
   return false;
 }
@@ -30,12 +38,12 @@ AddressBook.prototype.findContact = function(id) {
 //delete contact method
 AddressBook.prototype.deleteContact = function(id) {
   for (var i=0; i< this.contacts.length; i++) {
-    if (this.contacts[i]) {     // <-- This line is new!
+    if (this.contacts[i]) {     
       if (this.contacts[i].id == id) {
         delete this.contacts[i];
         return true;
       }
-    }                          // <-- This line is also new!
+    }                          
   };
   return false;
 }
@@ -47,6 +55,12 @@ function Contact(firstName, lastName, phoneNumber, emailAddress, physicalAddress
   this.phoneNumber = phoneNumber;
   this.emailAddress = emailAddress;
   this.physicalAddress = physicalAddress;
+ 
+}
+
+function Address(personalEmailAddress, workEmailAddress){
+  this.personalEmailAddress = personalEmailAddress,
+  this.workEmailAddress = workEmailAddress
 }
 
 Contact.prototype.fullName = function() {
@@ -71,8 +85,11 @@ function showContact(contactId) {
   $(".first-name").html(contact.firstName);
   $(".last-name").html(contact.lastName);
   $(".phone-number").html(contact.phoneNumber);
-  $(".email-address").html(contact.emailAddress);
+  $(".email-address").html(contact.address.personalEmailAddress + "," + contact.address.workEmailAddress);
   $(".physical-address").html(contact.physicalAddress);
+  $(".mailing-address").html(contact.mailingAddress);
+  $(".new-emails").html(contact.addAddress);
+
   var buttons = $("#buttons");
   buttons.empty();
   buttons.append("<button class='deleteButton' id=" +  + contact.id + ">Delete</button>");
@@ -82,7 +99,7 @@ function attachContactListeners() {
   $("ul#contacts").on("click", "li", function() {
     showContact(this.id);
   });
-  // Code below here is new!
+
   $("#buttons").on("click", ".deleteButton", function() {
     addressBook.deleteContact(this.id);
     $("#show-contact").hide();
@@ -99,6 +116,11 @@ $(document).ready(function() {
     var inputtedPhoneNumber = $("input#new-phone-number").val();
     var inputtedEmailAddress = $("input#new-email-address").val();
     var inputtedPhysicalAddress = $("input#new-physical-address").val();
+    var inputtedPersonalEmailAddress = $("input#personal-email-address").val();
+    var inputtedWorkEmailAddress = $("input#work-email-address").val();
+    var inputtedMailingAddress = $("input#new-mailing-address").val();
+    console.log(inputtedPersonalEmailAddress);
+    console.log(inputtedWorkEmailAddress);
     
 
      // empty field after submission
@@ -107,10 +129,20 @@ $(document).ready(function() {
      $("input#new-phone-number").val("");
      $("input#new-email-address").val("");
      $("input#new-physical-address").val("");
+     $("input#new-mailing-address").val("");
+     $("input#work-email-address").val("");
+     $("input#personal-email-address").val();
 
-    var newContact = new Contact(inputtedFirstName, inputtedLastName, inputtedPhoneNumber, inputtedEmailAddress, inputtedPhysicalAddress);
+
+    var newAddress = new Address (inputtedPersonalEmailAddress, inputtedWorkEmailAddress);
+    var newContact = new Contact(inputtedFirstName, inputtedLastName, inputtedPhoneNumber, newAddress, inputtedPhysicalAddress, inputtedMailingAddress);
     addressBook.addContact(newContact);
-    //console.log(addressBook.contacts);
+    newContact.addAddress(newAddress);
+    console.log(addressBook.contacts);
+    
     displayContactDetails(addressBook);
   })
 })
+
+
+// phoneNumber, emailAddress, physicalAddress
